@@ -5,14 +5,14 @@ var ms = require('ms');
 var express = require('express');
 var app = express();
 
-var keys = require('./keys');
+var key = require('./key');
 
 // Auth to Twitter
 var client = new twitter({
-    consumer_key: keys.CONSUMER_KEY,
-    consumer_secret: keys.CONSUMER_SECRET,
-    access_token_key: keys.ACCESS_KEY,
-    access_token_secret: keys.ACCESS_SECRET,
+    consumer_key: key.CONSUMER_KEY,
+    consumer_secret: key.CONSUMER_SECRET,
+    access_token_key: key.ACCESS_KEY,
+    access_token_secret: key.ACCESS_SECRET,
 });
 
 // Do things!
