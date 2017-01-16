@@ -1,20 +1,28 @@
 // Import things
-var twitter     = require('twitter');
-var moment      = require('moment');
+var twitter = require('twitter');
+var moment = require('moment');
+var ms = require('ms');
+var express = require('express');
+var app = express();
+
+var keys = require('./keys');
 
 // Auth to Twitter
 var client = new twitter({
-    consumer_key: 'xxxxxxxxxxxxxxxxxxxxxxxxx',
-    consumer_secret: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-    access_token_key: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-    access_token_secret: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+    consumer_key: keys.CONSUMER_KEY,
+    consumer_secret: keys.CONSUMER_SECRET,
+    access_token_key: keys.ACCESS_KEY,
+    access_token_secret: keys.ACCESS_SECRET,
 });
 
 // Do things!
 function snapTweet () {
 
     // Let's get some tweets
-    client.get('statuses/user_timeline', {trim_user: true, count: 20}, function(error, tweets, response){
+    client.get('statuses/user_timeline', {
+      trim_user: true,
+      count: 20
+    }, function(error, tweets, response){
       if(error) throw error;
 
       var i = 0;
@@ -27,13 +35,13 @@ function snapTweet () {
           var favd = tweets[i].favorited;
           var tweetDate = new Date(Date.parse(tweets[i].created_at.replace(/( \+)/, ' UTC$1')));
 
-          // Set an expiry date of 24 hours after a tweet has been published
-          var expiryDate = moment(tweetDate).add(1440, 'minutes')._d;
+          // Set an expiry date of 1 week after a tweet has been published
+          var expiryDate = moment(tweetDate).add(10080, 'minutes')._d;
           var now = moment();
 
           // If we find a tweet which is expired, call the function to delete it.
           // Unless it's favourited, in which case leave it alone.
-          if (moment(now).isAfter(expiryDate) && moment(tweetDate).isAfter('2016-03-03') && favd === false) {
+          if (moment(now).isAfter(expiryDate) && moment(tweetDate).isAfter('2017-01-16') && favd === false) {
               deleteTweet(id);
           }
 
@@ -50,7 +58,10 @@ function deleteTweet (e) {
     });
 }
 
-// Run every minute
-setInterval(function(){
+app.listen(3000, function() {
+  console.log('Server started, listening on port 3000');
+  // Run once a day
+  setInterval(function() {
     snapTweet();
-}, 60000);
+  }, ms('1d'));
+});
