@@ -1,4 +1,4 @@
-export var keys = {
+module.exports = {
   CONSUMER_KEY: '',
   CONSUMER_SECRET: '',
   ACCESS_KEY: '',
