@@ -23,7 +23,7 @@ function snapTweet () {
       trim_user: true,
       count: 20
     }, function(error, tweets, response){
-      if(error) throw error;
+      if(error) console.log(error);
 
       var i = 0;
       var len = tweets.length;
@@ -41,7 +41,7 @@ function snapTweet () {
 
           // If we find a tweet which is expired, call the function to delete it.
           // Unless it's favourited, in which case leave it alone.
-          if (moment(now).isAfter(expiryDate) && moment(tweetDate).isAfter('2017-01-16') && favd === false) {
+          if (moment(now).isAfter(expiryDate) && favd === false) {
               deleteTweet(id);
           }
 
@@ -63,5 +63,5 @@ app.listen(3000, function() {
   // Run once a day
   setInterval(function() {
     snapTweet();
-  }, ms('1d'));
+  }, ms('1s'));
 });
