@@ -63,5 +63,5 @@ app.listen(3000, function() {
   // Run once a day
   setInterval(function() {
     snapTweet();
-  }, ms('1s'));
+  }, ms('1h'));
 });
