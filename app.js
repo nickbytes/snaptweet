@@ -60,7 +60,7 @@ function deleteTweet (e) {
 
 app.listen(3000, function() {
   console.log('Server started, listening on port 3000');
-  // Run once a day
+  // Run once an hour
   setInterval(function() {
     snapTweet();
   }, ms('1h'));
